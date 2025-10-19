@@ -14,8 +14,18 @@ connectDB();
 
 // Middleware
 app.use(helmet());
+// CORS: allow multiple comma-separated origins from env (e.g., https://app.vercel.app,https://preview.vercel.app)
+const allowedOrigins = (process.env.CLIENT_URLS || process.env.CLIENT_URL || 'http://localhost:3000')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser clients
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS not allowed from origin: ${origin}`));
+  },
   credentials: true
 }));
 app.use(morgan('combined'));
