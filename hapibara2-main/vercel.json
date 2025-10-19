@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "hapibara-frontend/package.json", "use": "@vercel/next" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "hapibara-frontend/$1" }
+  ],
+  "cache": [
+    "hapibara-frontend/.next/cache/**",
+    "hapibara-frontend/node_modules/**"
+  ]
+}
+
